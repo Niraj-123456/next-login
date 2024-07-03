@@ -1,20 +1,16 @@
 "use client";
-import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { auth } from "@next/utils/firebase";
 import { signOut } from "firebase/auth";
-import { LogOut, User, UserCircle2 } from "lucide-react";
+import { LogOut, UserCircle2 } from "lucide-react";
 import { deleteCookie } from "cookies-next";
+import { User } from "@next/types/user";
+import { useUserContext } from "@next/context/UserContext";
 
-type User = {
-  photoUrl: string;
-  name: string;
-  email: string;
-};
-
-const Header = ({ user }: { user: User }) => {
+const Header = () => {
   const router = useRouter();
+  const { user } = useUserContext();
 
   const handleLogout = async () => {
     await signOut(auth);

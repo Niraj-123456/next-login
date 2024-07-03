@@ -1,8 +1,7 @@
 import { getCookie } from "cookies-next";
-import { cookies } from "next/headers";
 
 export function getUser() {
-  const cookie = getCookie("user-session", { cookies });
+  const cookie = getCookie("user-session");
   if (cookie) {
     const user = JSON.parse(cookie);
     return user;
