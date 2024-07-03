@@ -10,12 +10,7 @@ type UserContextType = {
 const UserContext = createContext<UserContextType | null>(null);
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const user = getUser();
-    setUser(user);
-  }, []);
+  const user = getUser();
 
   return (
     <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
