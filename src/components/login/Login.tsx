@@ -7,9 +7,10 @@ import { auth, db, googleProvider } from "../../utils/firebase";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { setCookie } from "cookies-next";
 import { CircleCheckBig } from "lucide-react";
+import { useUserContext } from "@next/context/UserContext";
 
 const LoginSchema = z.object({
   email: z
@@ -57,8 +58,8 @@ const GoogleIcon = () => (
 
 const Login = () => {
   const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { user } = useUserContext();
   const registrationSuccess =
     Boolean(searchParams.get("registrationSuccess")) ?? false;
   const [loggingIn, setLoggingIn] = useState<boolean>(false);
@@ -125,6 +126,7 @@ const Login = () => {
       }
       const accessToken = await user.getIdToken();
       setLoggingInWithGoogle(false);
+      router.push("/dashboard");
       setCookie(
         "user-session",
         JSON.stringify({
@@ -136,23 +138,14 @@ const Login = () => {
           SignedIn: true,
         })
       );
-      router.push("/dashboard");
     } catch (err) {
       setLoggingInWithGoogle(false);
     }
   };
 
-  useEffect(() => {
-    const handleReloadWindow = () => {
-      router.push(pathname);
-    };
-
-    window.addEventListener("beforeunload", handleReloadWindow);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleReloadWindow);
-    };
-  }, [router, pathname]);
+  if (user) {
+    return null;
+  }
 
   return (
     <div className="w-full h-full grid place-items-center">

@@ -1,6 +1,7 @@
 export type User = {
-  photoUrl: string;
-  name: string;
-  email: string;
+  uid: string;
+  photoUrl: string | null;
+  name: string | null;
+  email: string | null;
   accessToken: string;
 };
